@@ -1,0 +1,36 @@
+class Solution {
+public:
+int lx[4]={-1,1,0,0};
+int ly[4]={0,0,-1,1};
+vector<vector<int>> dp;
+int f(vector<vector<int>>& matrix, vector<vector<bool>>& check, int m, int n,int i, int j){
+    //Base 
+    if(i<0 || j<0 || i>=m || j>=n) return 0;
+    if(dp[i][j]!=-1) return dp[i][j];
+    //Recursive Case 
+    int ans=1;
+    for(int k=0;k<4;k++){
+        int xx=lx[k]+i;
+        int yy=ly[k]+j;
+        if(xx>=0 and yy>=0 and xx<m and yy<n and matrix[xx][yy]>matrix[i][j]){
+            check[i][j]=true;
+            ans=max(ans,1+f(matrix,check,m,n,xx,yy));
+        }
+    }
+    check[i][j]=false;
+    return dp[i][j]=ans;
+}
+    int longestIncreasingPath(vector<vector<int>>& matrix) {
+        int m=matrix.size();
+        int n=matrix[0].size();
+        dp.assign(m+1,vector<int>(n+1,-1));
+        vector<vector<bool>> check(m,(vector<bool>(n,false)));
+        int ans=0;
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                ans=max(ans,f(matrix,check,m,n,i,j));
+            }
+        }
+        return ans;
+    }
+};
