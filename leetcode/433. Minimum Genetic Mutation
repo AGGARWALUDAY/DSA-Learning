@@ -1,0 +1,37 @@
+class Solution {
+public:
+    int minMutation(string startGene, string endGene, vector<string>& bank) {
+        unordered_map<string,int> mp;
+        unordered_map<string,int> check;
+        for(auto p:bank){
+            check[p]++;
+        }
+        mp[startGene]++;
+        queue<string> q;
+        q.push(startGene);
+        int count=0;
+        while(!q.empty()){
+            int sz=q.size();
+            string use="ACGT";
+            while(sz--){
+                string temp=q.front();
+                if(temp==endGene){
+                    return count;
+                }
+                q.pop();
+                for(auto p:use){
+                    for(int i=0;i<temp.size();i++){
+                        string temp2=temp;
+                        temp2[i]=p;
+                        if(!mp.count(temp2) and check.count(temp2)){
+                            q.push(temp2);
+                            mp[temp2]++;
+                        }
+                    }
+                }
+            }
+            count++;
+        }
+        return -1;
+    }
+};
